@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="phaetonet-web:war">
+    <output-path>$PROJECT_DIR$/phaetonet/phaetonet-web/target</output-path>
+    <root id="archive" name="phaetonet-web.war">
+      <element id="artifact" artifact-name="phaetonet-web:war exploded" />
+    </root>
+  </artifact>
+</component>
