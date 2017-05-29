@@ -42,5 +42,20 @@ public class UserServiceImpl implements UserService {
          return userDao.save(existUser);
     }
 
+    @Override
+    public boolean saveUser(User user) {
+        boolean isSucess = false;
+        User existUser = userDao.getByUserCode(user.getUserCode());
+
+        if (existUser == null) {
+            isSucess = true;
+            user.setId(existUser.getId());
+        }
+
+        userDao.save(user);
+
+        return isSucess;
+    }
+
 
 }

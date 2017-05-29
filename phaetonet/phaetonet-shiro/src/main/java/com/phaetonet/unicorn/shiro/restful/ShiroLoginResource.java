@@ -1,7 +1,9 @@
 package com.phaetonet.unicorn.shiro.restful;
 
 import com.phaetonet.unicorn.shiro.entity.User;
+import com.phaetonet.unicorn.shiro.service.ShiroService;
 import com.phaetonet.unicorn.shiro.service.UserService;
+import com.phaetonet.unicorn.shiro.util.CryptographyUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -23,22 +25,28 @@ public class ShiroLoginResource {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ShiroService shiroService;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public boolean login(@RequestBody User user) {
+        logger.info("login...");
+        return shiroService.login(user);
 
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserCode(), user.getPassword());
-        token.setRememberMe(user.getRemberMe());
+    }
 
-        boolean isSucess = true;
-        try {
-            subject.login(token);
-        } catch (AuthenticationException e) {
-            isSucess = false;
-        }
-        userService.updateUserLogin(user, isSucess);
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public boolean createUser(@RequestBody User user) {
 
-        return isSucess;
+        logger.info("createUser...");
+        return shiroService.createUser(user);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public boolean updateUser(@RequestBody User user) {
+
+        logger.info("updateUser...");
+        return shiroService.updateUser(user);
 
     }
 }

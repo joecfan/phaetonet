@@ -16,4 +16,6 @@ public interface UserService {
 
 	public User updateUserLogin(User user, boolean isSucess);
 
+	public boolean saveUser(User user);
+
 }
