@@ -1,6 +1,7 @@
 package com.phaetonet.unicorn.shiro.service.impl;
 
 import com.phaetonet.unicorn.shiro.entity.User;
+import com.phaetonet.unicorn.shiro.restful.ShiroLoginResource;
 import com.phaetonet.unicorn.shiro.service.ShiroService;
 import com.phaetonet.unicorn.shiro.service.UserService;
 import com.phaetonet.unicorn.shiro.util.CryptographyUtil;
@@ -8,6 +9,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,8 @@ public class ShiroServiceImpl implements ShiroService {
     @Value("${shiro.key.md5}")
     private String shiroMD5Key;
 
+    private final static Logger logger = LoggerFactory.getLogger(ShiroServiceImpl.class);
+
     @Override
     public boolean login(User user) {
         Subject subject = SecurityUtils.getSubject();
@@ -38,7 +43,7 @@ public class ShiroServiceImpl implements ShiroService {
         try {
             subject.login(token);
         } catch (AuthenticationException e) {
-            isSucess = false;
+            logger.error(e.getMessage());
         }
         userService.updateUserLogin(user, isSucess);
 
@@ -47,8 +52,6 @@ public class ShiroServiceImpl implements ShiroService {
 
     @Override
     public boolean createUser(User user) {
-
-        Subject subject = SecurityUtils.getSubject();
 
         return userService.saveUser(user);
     }

@@ -42,8 +42,8 @@ public class User {
     @Column(name = "qq", length = 20)
     private String qq;
 
-    @Column(name = "invalidLogin", length = 2, columnDefinition="INT default 0",nullable=false)
-    private Integer invalidLogin;
+    @Column(name = "invalidLogin", length = 2)
+    private Integer invalidLogin = 0;
 
     @Column(name = "extInfo", length = 2000)
     private String extInfo;
