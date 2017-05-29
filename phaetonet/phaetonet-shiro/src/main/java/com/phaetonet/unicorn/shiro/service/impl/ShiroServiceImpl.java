@@ -1,7 +1,6 @@
 package com.phaetonet.unicorn.shiro.service.impl;
 
 import com.phaetonet.unicorn.shiro.entity.User;
-import com.phaetonet.unicorn.shiro.restful.ShiroLoginResource;
 import com.phaetonet.unicorn.shiro.service.ShiroService;
 import com.phaetonet.unicorn.shiro.service.UserService;
 import com.phaetonet.unicorn.shiro.util.CryptographyUtil;

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_shiro_user")
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,12 +56,6 @@ public class User {
 
     @Column(name = "loginTime")
     private Date loginTime;
-
-    @Column(name = "updateTime")
-    private Date updateTime;
-
-    @Column(name = "insertTime")
-    private Date insertTime;
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
@@ -160,22 +154,6 @@ public class User {
 
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getInsertTime() {
-        return insertTime;
-    }
-
-    public void setInsertTime(Date insertTime) {
-        this.insertTime = insertTime;
     }
 
     public List<Role> getRoles() {
