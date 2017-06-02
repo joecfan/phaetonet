@@ -43,7 +43,7 @@ app.use(webpackHotMiddleware(compiler));
 // 首页导航接口
 app.get('/api/book/navigation', function (req, res) {
     for (let i = 0; i < 9; i++) {
-        nav.push();
+        nav.push()
     }
     return res.send(nav);
 })
