@@ -57,12 +57,25 @@ export default class HomeContainer extends React.Component {
         }
     }
 
-    handleClick() {
+    handleClick(elem) {
         //该函数用来执行组件内部的事件，比如在这里就是nav组件菜单的导航点击事件
         // this.props.history.push('/')
+        if (elem.id == "1") {
+            window.location.href = 'weixin://';
+            //this.props.history.push('/search')
+        }
+
+        setTimeout(function(){
+           // window.location= ""; //android下载地址
+            console.log("=========aaaa=======");
+
+        },500);
+
+        console.log("=========dsds=======",elem)
     }
 
     render() {
+        console.log("================", this)
         const { navMain } = this.props.nav
         const { bookDetails } = this.props.books
         //还可以通过自定义样式传递给组件
@@ -86,7 +99,7 @@ export default class HomeContainer extends React.Component {
                                         key={index}
                                         title={elem.text}
                                         index={index}
-                                        handleClick={() => this.handleClick()}
+                                        handleClick={() => this.handleClick(elem)}
                                     />
                                 )
                             })
