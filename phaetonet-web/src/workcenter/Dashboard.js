@@ -7,6 +7,16 @@ import {
     DropdownButton,
     Panel, PageHeader, ListGroup, ListGroupItem, Button,
 } from 'react-bootstrap';
+import StatWidget from '../component/StatWidget';
+import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
+import AreaChart from 'recharts/lib/chart/AreaChart';
+import BarChart from 'recharts/lib/chart/BarChart';
+import Tooltip from 'recharts/lib/component/Tooltip';
+import Area from 'recharts/lib/cartesian/Area';
+import Bar from 'recharts/lib/cartesian/Bar';
+import XAxis from 'recharts/lib/cartesian/XAxis';
+import YAxis from 'recharts/lib/cartesian/YAxis';
+import Donut from '../component/Donut';
 
 
 class Dashboard extends Component {
@@ -259,3 +269,5 @@ class Dashboard extends Component {
         );
     }
 }
+
+export default Dashboard;

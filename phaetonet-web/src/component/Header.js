@@ -12,7 +12,7 @@ import {
     ProgressBar,
 } from 'react-bootstrap';
 import Navbar, {Brand} from 'react-bootstrap/lib/Navbar';
-import Sidebar from './Sidebar';
+
 
 class Header extends Component {
 
@@ -158,7 +158,6 @@ class Header extends Component {
                         </NavDropdown>
 
                     </ul>
-                    <Sidebar />
                 </Navbar>
             </div>
         );
