@@ -26,11 +26,14 @@ class Login extends Component {
             user: {userCode:'',password:'',remberMe:false},
         };
         this.unsubscribe = LoginStore.listen(this.onStatusChange.bind(this));
+
+        document.addEventListener('keydown', this.onkeydown.bind(this), false);
     }
 
     componentWillUnmount () {
         this.unsubscribe();
         this.state = {};
+        document.removeEventListener('keydown', this.onkeydown.bind(this), false);
     }
 
     onStatusChange (res) {
@@ -66,7 +69,14 @@ class Login extends Component {
 
     }
 
+    onkeydown(e) {
+        if (e.keyCode === 13) {
+            this.doLogin();
+        }
+    }
+
     render() {
+
         let user = this.state.user;
         return (
             <div className="col-md-4 col-md-offset-4">
