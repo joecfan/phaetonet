@@ -13,7 +13,7 @@ public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "userCode", length = 20)
     private String userCode;
@@ -57,14 +57,17 @@ public class User extends BaseEntity{
     @Column(name = "loginTime")
     private Date loginTime;
 
+    @Transient
+    private boolean isLogin = false;
+
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -190,5 +193,13 @@ public class User extends BaseEntity{
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean login) {
+        isLogin = login;
     }
 }

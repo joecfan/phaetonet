@@ -30,7 +30,7 @@ public class ShiroServiceImpl implements ShiroService {
     private final static Logger logger = LoggerFactory.getLogger(ShiroServiceImpl.class);
 
     @Override
-    public boolean login(User user) {
+    public User login(User user) {
         Subject subject = SecurityUtils.getSubject();
 
         String password = CryptographyUtil.md5(user.getPassword(), shiroMD5Key);
@@ -38,15 +38,18 @@ public class ShiroServiceImpl implements ShiroService {
 
         token.setRememberMe(user.getRemberMe());
 
-        boolean isSucess = true;
+        boolean isLogin = true;
         try {
             subject.login(token);
         } catch (AuthenticationException e) {
+            isLogin = false;
             logger.error(e.getMessage());
         }
-        userService.updateUserLogin(user, isSucess);
+        User u = userService.updateUserLogin(user, isLogin);
+        u.setPassword(null);
+        u.setLogin(isLogin);
 
-        return isSucess;
+        return u;
     }
 
     @Override

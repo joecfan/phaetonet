@@ -9,7 +9,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "rawEventId", length = 10)
     private Integer rawEventId;
@@ -74,11 +74,11 @@ public class Event {
     @Column(name = "closedBy", length = 10)
     private String closedBy;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

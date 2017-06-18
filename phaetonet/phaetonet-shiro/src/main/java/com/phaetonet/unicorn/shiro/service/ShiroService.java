@@ -7,7 +7,7 @@ import com.phaetonet.unicorn.shiro.entity.User;
  */
 public interface ShiroService {
 
-    public boolean login(User user);
+    public User login(User user);
 
     public boolean createUser(User user);
 

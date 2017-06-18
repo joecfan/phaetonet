@@ -1,6 +1,7 @@
 package com.phaetonet.unicorn.shiro.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -11,6 +12,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -59,15 +62,24 @@ public class ShiroConfiguration {
         return realm;
     }
 
-//    /**
-//     * EhCacheManager，缓存管理，用户登陆成功后，把用户信息和权限信息缓存起来，
-//     * 然后每次用户请求时，放入用户的session中，如果不设置这个bean，每个请求都会查询一次数据库。
-//     */
-//    @Bean(name = "ehCacheManager")
-//    @DependsOn("lifecycleBeanPostProcessor")
-//    public EhCacheManager ehCacheManager() {
-//        return new EhCacheManager();
-//    }
+    /**
+     * EhCacheManager，缓存管理，用户登陆成功后，把用户信息和权限信息缓存起来，
+     * 然后每次用户请求时，放入用户的session中，如果不设置这个bean，每个请求都会查询一次数据库。
+     */
+    @Bean(name = "ehCacheManager")
+    @DependsOn("lifecycleBeanPostProcessor")
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager em = new EhCacheManager();
+        em.setCacheManagerConfigFile("classpath:ehcache-shiro.xml");
+        return em;
+    }
+
+    @Bean(name = "myShiroRealm")
+    public ShiroRealm myShiroRealm(EhCacheManager cacheManager) {
+        ShiroRealm realm = new ShiroRealm();
+        realm.setCacheManager(cacheManager);
+        return realm;
+    }
 
     /**
      * SecurityManager，权限管理，这个类组合了登陆，登出，权限，session的处理，是个比较重要的类。
@@ -77,7 +89,7 @@ public class ShiroConfiguration {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
-//        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setCacheManager(ehCacheManager());
         return securityManager;
     }
 
@@ -90,23 +102,25 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager());
 
+        shiroFilterFactoryBean.setLoginUrl("/shiro/login");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/shiro/403");
+
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         LogoutFilter logoutFilter = new LogoutFilter();
-        logoutFilter.setRedirectUrl("/login");
-//        filters.put("logout",null);
+        logoutFilter.setRedirectUrl("/shiro/login");
+        filters.put("logout",null);
         shiroFilterFactoryBean.setFilters(filters);
 
         Map<String, String> filterChainDefinitionManager = new LinkedHashMap<String, String>();
-        filterChainDefinitionManager.put("/logout", "logout");
-        filterChainDefinitionManager.put("/user/**", "authc,roles[ROLE_USER]");
-        filterChainDefinitionManager.put("/events/**", "authc,roles[ROLE_ADMIN]");
-//        filterChainDefinitionManager.put("/user/edit/**", "authc,perms[user:edit]");// 这里为了测试，固定写死的值，也可以从数据库或其他配置中读取
-        filterChainDefinitionManager.put("/**", "anon");
+
+        // authc：该过滤器下的页面必须验证后才能访问，它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+        filterChainDefinitionManager.put("/shiro/create", "authc");// 这里为了测试，只限制/user，实际开发中请修改为具体拦截的请求规则
+        filterChainDefinitionManager.put("/shiro/update", "authc");
+        filterChainDefinitionManager.put("/shiro/login", "anon");
+        filterChainDefinitionManager.put("/**", "anon");//anon 可以理解为不拦截
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
 
-
-        shiroFilterFactoryBean.setSuccessUrl("/");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         return shiroFilterFactoryBean;
     }
 
@@ -132,6 +146,13 @@ public class ShiroConfiguration {
         return aASA;
     }
 
+    @Bean
+    public PropertySourcesPlaceholderConfigurer createPropertySourcesPlaceholderConfigurer() {
+        ClassPathResource resource = new ClassPathResource("shiro.properties");
+        PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        propertyPlaceholderConfigurer.setLocation(resource);
+        return propertyPlaceholderConfigurer;
+    }
 
 }
 

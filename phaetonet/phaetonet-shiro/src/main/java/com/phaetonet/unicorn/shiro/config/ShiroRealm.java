@@ -36,7 +36,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
         User user = userService.getByUserCode((String) pc.getPrimaryPrincipal());
 
-
         //把principals放session中 key=userId value=principals
         SecurityUtils.getSubject().getSession().setAttribute(String.valueOf(user.getId()),SecurityUtils.getSubject().getPrincipals());
 
@@ -63,8 +62,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
         User user = userService.getByUserCode(token.getUsername());
         if (user != null) {
-//            byte[] salt = Encodes.decodeHex(user.getSalt());
-//            ShiroUser shiroUser=new ShiroUser(user.getId(), user.getLoginName(), user.getName());
             //设置用户session
             Session session = SecurityUtils.getSubject().getSession();
             session.setAttribute("user", user);
