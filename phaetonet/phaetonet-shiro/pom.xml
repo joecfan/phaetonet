@@ -21,7 +21,11 @@
 
     <dependencies>
 
-
+        <dependency>
+            <groupId>com.phaetonet.unicorn.common</groupId>
+            <artifactId>phaetonet-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 
