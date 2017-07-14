@@ -1,6 +1,6 @@
 package com.phaetonet.unicorn.shiro.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.phaetonet.unicorn.common.entity.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_shiro_user")
-public class User extends BaseEntity{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,8 +60,36 @@ public class User extends BaseEntity{
     @Transient
     private boolean isLogin = false;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Role> roles;
+
+    @Column(name = "updateTime")
+    private Date updateTime;
+
+    @Column(name = "insertTime")
+    private Date insertTime;
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        if (updateTime == null) {
+            updateTime = new Date();
+        }
+        this.updateTime = updateTime;
+    }
+
+    public Date getInsertTime() {
+        return insertTime;
+    }
+
+    public void setInsertTime(Date insertTime) {
+        if (insertTime == null) {
+            insertTime = new Date();
+        }
+        this.insertTime = insertTime;
+    }
 
     public Long getId() {
         return id;
